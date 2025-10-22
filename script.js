@@ -1,11 +1,10 @@
-
-//--------LÅT STÅ----------- 
-  // Definiera fasta "konstanter" för olika typer av animering av menyn
-  ANIMATION = { 
-    NONE: 'none',           // Ingen animation
-    TIMER: 'timer',         // setInterval-baserad animation
-    ALTERNATIVE: 'alternative' // ytterligare alternativ
-  };
+//--------LÅT STÅ-----------
+// Definiera fasta "konstanter" för olika typer av animering av menyn
+ANIMATION = {
+  NONE: "none", // Ingen animation
+  TIMER: "timer", // setInterval-baserad animation
+  ALTERNATIVE: "alternative", // ytterligare alternativ
+};
 
 // Ändra värdet för att styra vilken meny-animation som ska användas
 window.MENU_ANIMATION_MODE ??= ANIMATION.NONE; // ANIMATION.TIMER (Default) = ingen animation (G-nivå), ANIMATION.TIMER // (VG-nivå), ANIMATION.ALTERNATIVE // ytterligare ett alternativ (VG-nivå);
@@ -22,3 +21,14 @@ if (window.MENU_ANIMATION_MODE === ANIMATION.NONE) {
 }
 //--------------------------
 
+// Menu functionality
+
+function toggleMenu() {
+  console.log("button clicked");
+  revealMenu();
+}
+
+function revealMenu() {
+  let SelectUlMenuCssRule = document.styleSheets[2].cssRules[8].style;
+  let changeUlMenuPosition = SelectUlMenuCssRule.setProperty("left", "0px");
+}
