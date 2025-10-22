@@ -30,8 +30,8 @@ function toggleMenu() {
   changeMenuIconBackgroundColor();
 }
 
-async function setChannel(channel) {
-  const url = `./data/${channel}.json`;
+async function setChannel(channelName) {
+  const url = `./data/${channelName}.json`;
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -43,6 +43,15 @@ async function setChannel(channel) {
   } catch (error) {
     console.error(error.message);
   }
+
+  renderChannelTitle(channelName);
+}
+
+function renderChannelTitle(nameOfChannel) {
+  let ChannelTitle = document.querySelector("#js-title");
+  console.log(ChannelTitle);
+  ChannelTitle.innerText = `${nameOfChannel}`;
+  console.log(ChannelTitle);
 }
 
 function revealMenu() {
