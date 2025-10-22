@@ -30,6 +30,21 @@ function toggleMenu() {
   changeMenuIconBackgroundColor();
 }
 
+async function setChannel(channel) {
+  const url = `./data/${channel}.json`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    console.log(result);
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
 function revealMenu() {
   let UlMenuCssRule = document.styleSheets[2].cssRules[8].style;
   let UlMenuPosition = UlMenuCssRule.setProperty("left", "0px");
