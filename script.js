@@ -22,6 +22,7 @@ if (window.MENU_ANIMATION_MODE === ANIMATION.NONE) {
 //--------------------------
 
 // Menu functionality
+function main() {}
 
 function toggleMenu() {
   console.log("button clicked");
@@ -38,13 +39,13 @@ async function setChannel(channelName) {
       throw new Error(`Response status: ${response.status}`);
     }
 
-    const result = await response.json();
-    console.log(result);
+    const channelProgramsArray = await response.json();
+    renderChannelInfo(channelProgramsArray);
+    renderChannelTitle(channelName);
+    // showProgramInfo(channelName);
   } catch (error) {
     console.error(error.message);
   }
-
-  renderChannelTitle(channelName);
 }
 
 function renderChannelTitle(nameOfChannel) {
@@ -52,6 +53,34 @@ function renderChannelTitle(nameOfChannel) {
   console.log(ChannelTitle);
   ChannelTitle.innerText = `${nameOfChannel}`;
   console.log(ChannelTitle);
+}
+
+// function (nameOfChannel) {
+//   ArrayWithRemovedDescription = channelProgramsArray.map((name, start) =>
+//     renderChannelInfo()
+//   );
+// }
+
+function renderChannelInfo(channelProgramsArray) {
+  let ProgramInfoDiv = document.querySelector("#js-schedule");
+  let showPreviousBtn = `<ul class="list-group list-group-flush">
+          <li class="list-group-item show-previous">Visa tidigare program</li>`;
+
+  ProgramInfoDiv.innerHTML = showPreviousBtn;
+  ProgramInfoDiv.appendChild(createProgramList(channelProgramsArray));
+}
+
+function createProgramList(programs) {
+  let ul = document.createElement("ul");
+  ul.classList.add("list-group", "list-group-flush");
+  programs.forEach((program) => {
+    let li = document.createElement("li");
+    li.classList.add("list-group-item");
+    li.innerHTML = ` <strong>${program.start}</strong>
+    <div>${program.name}</div>`;
+    ul.appendChild(li);
+  });
+  return ul;
 }
 
 function revealMenu() {
@@ -79,3 +108,13 @@ function changeMenuIconBackgroundColor() {
     "10px"
   );
 }
+// console.log(
+//   new Intl.DateTimeFormat("sw-SW", {
+//     dateStyle: "full",
+//     timeStyle: "long",
+//     timeZone: "Australia/Sydney",
+//   }).format(date)
+// );
+
+// const date = new Date("2021-02-10T22:30:00+01:00");
+// console.log("2021-02-10T22:30:00+01:00".split("T")[1].split(":")[0]);
