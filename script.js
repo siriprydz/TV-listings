@@ -40,8 +40,11 @@ async function setChannel(channelName) {
     }
 
     const channelProgramsArray = await response.json();
-    renderChannelInfo(channelProgramsArray);
+    const upcomingChannelPrograms = upcomingPrograms(channelProgramsArray);
+    renderChannelInfo(upcomingChannelPrograms);
     renderChannelTitle(channelName);
+    formatTime(upcomingChannelPrograms);
+
     // showProgramInfo(channelName);
   } catch (error) {
     console.error(error.message);
@@ -68,6 +71,68 @@ function renderChannelInfo(channelProgramsArray) {
 
   ProgramInfoDiv.innerHTML = showPreviousBtn;
   ProgramInfoDiv.appendChild(createProgramList(channelProgramsArray));
+}
+
+let testArray = [
+  {
+    name: "VM-vintern: Magasin",
+    start: "2021-02-10T22:30:00+01:00",
+    description:
+      "Höjdpunkter, nyheter och intervjuer från skidskytte-VM i Pokljuka, Slovenien och alpina VM i Cortina, Italien. Programledare: André Pops.",
+  },
+  {
+    name: "Komma ut",
+    start: "2021-02-10T23:00:00+01:00",
+    description:
+      "Sigrid. Sigrid ska ta med sin flickvän på släktmiddag för första gången. Eftersom inte alla i släkten vet att hon är homosexuell har hon bestämt sig för att först berätta för sin faster och farbror. Sigrid får också träffa två kända idrottskvinnor som är gifta med varandra och har barn. Del 5 av 7. UR.",
+  },
+  {
+    name: "Rapport",
+    start: "2021-02-10T22:25:00+01:00",
+    description: "Nyheter från Sverige och världen.",
+  },
+  {
+    name: "Sverige idag",
+    start: "2021-02-11T04:45:00+01:00",
+    description: "Nyheter från hela Sverige - direkt från Umeå.",
+  },
+];
+
+let formattedChannelProgramsArray = [];
+function formatTime(channelProgramsArray) {
+  // let timeFormat = new Intl.DateTimeFormat("sv-SE", {
+  //   hour: "2-digit",
+  //   minute: "2-digit",
+  // });
+
+  formattedChannelProgramsArray = channelProgramsArray.map((program) => {
+    program.start = new Intl.DateTimeFormat("sv-SE", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  });
+  console.log(formattedChannelProgramsArray);
+  return formattedChannelProgramsArray;
+}
+
+// channelProgramsArray.forEach(program) => {
+//   let date = new Date(dateString);
+//   console.log(timeFormat.format(date));
+// }
+
+upcomingPrograms(testArray);
+function upcomingPrograms(programs) {
+  const currentTime = new Date();
+  nowMinutes = currentTime.getHours() * 60 + currentTime.getMinutes(); //Minutes since midight
+
+  const upcomingPrograms = programs.filter((program) => {
+    const programDate = new Date(program.start);
+    const programMinutes =
+      programDate.getHours() * 60 + programDate.getMinutes();
+    return programMinutes >= nowMinutes;
+  });
+  console.log(upcomingPrograms);
+  return upcomingPrograms;
 }
 
 function createProgramList(programs) {
