@@ -25,6 +25,7 @@ if (window.MENU_ANIMATION_MODE === ANIMATION.NONE) {
 function main() {}
 
 let allChannelPrograms = [];
+let showAllProgramsButton = true;
 
 function toggleMenu() {
   console.log("button clicked");
@@ -41,6 +42,7 @@ async function setChannel(channelName) {
     }
 
     const channelProgramsArray = await response.json();
+    showAllProgramsButton = true;
     allChannelPrograms = channelProgramsArray;
 
     const upcomingChannelPrograms = upcomingPrograms(channelProgramsArray);
@@ -69,15 +71,21 @@ function renderChannelTitle(nameOfChannel) {
 
 function renderChannelInfo(channelProgramsArray) {
   let ProgramInfoDiv = document.querySelector("#js-schedule");
-  let showPreviousBtn = `<ul class="list-group list-group-flush">
-          <li class="list-group-item show-previous">Visa tidigare program</li>`;
+  let ProgramInfoDivContent = "";
+  let showPreviousBtn = "";
+  if (showAllProgramsButton) {
+    showPreviousBtn = `<li class="list-group-item show-previous">Visa tidigare program</li>`;
+  }
+  ProgramInfoDiv.innerHTML = showPreviousBtn + ProgramInfoDivContent;
 
-  ProgramInfoDiv.innerHTML = showPreviousBtn;
   showPreviousBtn = document.querySelector(".show-previous");
-  showPreviousBtn.addEventListener("click", (event) => {
-    console.log("visar alla program");
-    showAllPrograms(allChannelPrograms);
-  });
+  if (showPreviousBtn) {
+    showPreviousBtn.addEventListener("click", (event) => {
+      showAllProgramsButton = false;
+      console.log("visar alla program");
+      showAllPrograms(allChannelPrograms);
+    });
+  }
   ProgramInfoDiv.appendChild(createProgramList(channelProgramsArray));
 }
 
