@@ -24,13 +24,14 @@ if (window.MENU_ANIMATION_MODE === ANIMATION.NONE) {
 // Menu functionality
 function main() {}
 
+let allChannelPrograms = [];
+
 function toggleMenu() {
   console.log("button clicked");
   revealMenu();
   changeMenuIcon();
   changeMenuIconBackgroundColor();
 }
-
 async function setChannel(channelName) {
   const url = `./data/${channelName}.json`;
   try {
@@ -40,6 +41,8 @@ async function setChannel(channelName) {
     }
 
     const channelProgramsArray = await response.json();
+    allChannelPrograms = channelProgramsArray;
+
     const upcomingChannelPrograms = upcomingPrograms(channelProgramsArray);
     renderChannelInfo(upcomingChannelPrograms);
     renderChannelTitle(channelName);
@@ -70,7 +73,16 @@ function renderChannelInfo(channelProgramsArray) {
           <li class="list-group-item show-previous">Visa tidigare program</li>`;
 
   ProgramInfoDiv.innerHTML = showPreviousBtn;
+  showPreviousBtn = document.querySelector(".show-previous");
+  showPreviousBtn.addEventListener("click", (event) => {
+    console.log("visar alla program");
+    showAllPrograms(allChannelPrograms);
+  });
   ProgramInfoDiv.appendChild(createProgramList(channelProgramsArray));
+}
+
+function showAllPrograms(programs) {
+  renderChannelInfo(programs);
 }
 
 let testArray = [
