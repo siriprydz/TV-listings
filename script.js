@@ -123,7 +123,7 @@ function formatTime(channelProgramsArray) {
 upcomingPrograms(testArray);
 function upcomingPrograms(programs) {
   const currentTime = new Date();
-  nowMinutes = currentTime.getHours() * 60 + currentTime.getMinutes(); //Minutes since midight
+  const nowMinutes = currentTime.getHours() * 60 + currentTime.getMinutes(); //Minutes since midight
 
   const upcomingPrograms = programs.filter((program) => {
     const programDate = new Date(program.start);
@@ -132,7 +132,21 @@ function upcomingPrograms(programs) {
     return programMinutes >= nowMinutes;
   });
   console.log(upcomingPrograms);
-  return upcomingPrograms;
+  return upcomingProgramsInOrder(upcomingPrograms);
+}
+
+function upcomingProgramsInOrder(programs) {
+  programs.sort((aProgram, bProgram) => {
+    const aDate = new Date(aProgram.start);
+    const bDate = new Date(bProgram.start);
+
+    const aMinutes = aDate.getHours() * 60 + aDate.getMinutes();
+    const bMinutes = bDate.getHours() * 60 + bDate.getMinutes();
+
+    return aMinutes - bMinutes;
+  });
+
+  return programs;
 }
 
 function createProgramList(programs) {
