@@ -44,6 +44,7 @@ async function setChannel(channelName) {
     const channelProgramsArray = await response.json();
     showAllProgramsButton = true;
     allChannelPrograms = channelProgramsArray;
+    console;
 
     const upcomingChannelPrograms = upcomingPrograms(channelProgramsArray);
     renderChannelInfo(upcomingChannelPrograms);
@@ -83,6 +84,7 @@ function renderChannelInfo(channelProgramsArray) {
     showPreviousBtn.addEventListener("click", (event) => {
       showAllProgramsButton = false;
       console.log("visar alla program");
+      console.log(allChannelPrograms);
       showAllPrograms(allChannelPrograms);
     });
   }
@@ -117,28 +119,6 @@ let testArray = [
     description: "Nyheter från hela Sverige - direkt från Umeå.",
   },
 ];
-
-let formattedChannelProgramsArray = [];
-function formatTime(channelProgramsArray) {
-  // let timeFormat = new Intl.DateTimeFormat("sv-SE", {
-  //   hour: "2-digit",
-  //   minute: "2-digit",
-  // });
-
-  formattedChannelProgramsArray = channelProgramsArray.map((program) => {
-    program.start = new Intl.DateTimeFormat("sv-SE", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  });
-  console.log(formattedChannelProgramsArray);
-  return formattedChannelProgramsArray;
-}
-
-// channelProgramsArray.forEach(program) => {
-//   let date = new Date(dateString);
-//   console.log(timeFormat.format(date));
-// }
 
 upcomingPrograms(testArray);
 function upcomingPrograms(programs) {
@@ -175,7 +155,16 @@ function createProgramList(programs) {
   programs.forEach((program) => {
     let li = document.createElement("li");
     li.classList.add("list-group-item");
-    li.innerHTML = ` <strong>${program.start}</strong>
+
+    const date = new Date(program.start);
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+
+    const stringHours = hours < 10 ? "0" + hours : hours;
+    const stringMinutes = minutes < 10 ? "0" + minutes : minutes;
+    const timeString = stringHours + ":" + stringMinutes;
+
+    li.innerHTML = ` <strong>${timeString}</strong>
     <div>${program.name}</div>`;
     ul.appendChild(li);
   });
@@ -207,13 +196,3 @@ function changeMenuIconBackgroundColor() {
     "10px"
   );
 }
-// console.log(
-//   new Intl.DateTimeFormat("sw-SW", {
-//     dateStyle: "full",
-//     timeStyle: "long",
-//     timeZone: "Australia/Sydney",
-//   }).format(date)
-// );
-
-// const date = new Date("2021-02-10T22:30:00+01:00");
-// console.log("2021-02-10T22:30:00+01:00".split("T")[1].split(":")[0]);
