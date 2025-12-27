@@ -24,13 +24,15 @@ if (window.MENU_ANIMATION_MODE === ANIMATION.NONE) {
 // Menu functionality
 function main() {}
 
+let allChannelPrograms = [];
+let showAllProgramsButton = true;
+
 function toggleMenu() {
   console.log("button clicked");
   revealMenu();
   changeMenuIcon();
   changeMenuIconBackgroundColor();
 }
-
 async function setChannel(channelName) {
   const url = `./data/${channelName}.json`;
   try {
@@ -40,9 +42,14 @@ async function setChannel(channelName) {
     }
 
     const channelProgramsArray = await response.json();
-    renderChannelInfo(channelProgramsArray);
+    showAllProgramsButton = true;
+    allChannelPrograms = channelProgramsArray;
+    console;
+
+    const upcomingChannelPrograms = upcomingPrograms(channelProgramsArray);
+    renderChannelInfo(upcomingChannelPrograms);
     renderChannelTitle(channelName);
-    // showProgramInfo(channelName);
+    formatTime(upcomingChannelPrograms);
   } catch (error) {
     console.error(error.message);
   }
@@ -55,19 +62,57 @@ function renderChannelTitle(nameOfChannel) {
   console.log(ChannelTitle);
 }
 
-// function (nameOfChannel) {
-//   ArrayWithRemovedDescription = channelProgramsArray.map((name, start) =>
-//     renderChannelInfo()
-//   );
-// }
-
 function renderChannelInfo(channelProgramsArray) {
   let ProgramInfoDiv = document.querySelector("#js-schedule");
-  let showPreviousBtn = `<ul class="list-group list-group-flush">
-          <li class="list-group-item show-previous">Visa tidigare program</li>`;
+  let ProgramInfoDivContent = "";
+  let showPreviousBtn = "";
+  if (showAllProgramsButton) {
+    showPreviousBtn = `<li class="list-group-item show-previous">Visa tidigare program</li>`;
+  }
+  ProgramInfoDiv.innerHTML = showPreviousBtn + ProgramInfoDivContent;
 
-  ProgramInfoDiv.innerHTML = showPreviousBtn;
+  showPreviousBtn = document.querySelector(".show-previous");
+  if (showPreviousBtn) {
+    showPreviousBtn.addEventListener("click", (event) => {
+      showAllProgramsButton = false;
+      console.log("visar alla program");
+      console.log(allChannelPrograms);
+      showAllPrograms(allChannelPrograms);
+    });
+  }
   ProgramInfoDiv.appendChild(createProgramList(channelProgramsArray));
+}
+
+function showAllPrograms(programs) {
+  renderChannelInfo(programs);
+}
+
+function upcomingPrograms(programs) {
+  const currentTime = new Date();
+  const nowMinutes = currentTime.getHours() * 60 + currentTime.getMinutes(); //Minutes since midight
+
+  const upcomingPrograms = programs.filter((program) => {
+    const programDate = new Date(program.start);
+    const programMinutes =
+      programDate.getHours() * 60 + programDate.getMinutes();
+    return programMinutes >= nowMinutes;
+  });
+  console.log(upcomingPrograms);
+  return upcomingProgramsInOrder(upcomingPrograms);
+}
+
+function upcomingProgramsInOrder(programs) {
+  programs.sort((aProgram, bProgram) => {
+    const aDate = new Date(aProgram.start);
+    const bDate = new Date(bProgram.start);
+
+    const aMinutes = aDate.getHours() * 60 + aDate.getMinutes();
+    const bMinutes = bDate.getHours() * 60 + bDate.getMinutes();
+
+    return aMinutes - bMinutes;
+  });
+
+  return programs;
 }
 
 function createProgramList(programs) {
@@ -76,7 +121,16 @@ function createProgramList(programs) {
   programs.forEach((program) => {
     let li = document.createElement("li");
     li.classList.add("list-group-item");
-    li.innerHTML = ` <strong>${program.start}</strong>
+
+    const date = new Date(program.start);
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+
+    const stringHours = hours < 10 ? "0" + hours : hours;
+    const stringMinutes = minutes < 10 ? "0" + minutes : minutes;
+    const timeString = stringHours + ":" + stringMinutes;
+
+    li.innerHTML = ` <strong>${timeString}</strong>
     <div>${program.name}</div>`;
     ul.appendChild(li);
   });
@@ -108,13 +162,3 @@ function changeMenuIconBackgroundColor() {
     "10px"
   );
 }
-// console.log(
-//   new Intl.DateTimeFormat("sw-SW", {
-//     dateStyle: "full",
-//     timeStyle: "long",
-//     timeZone: "Australia/Sydney",
-//   }).format(date)
-// );
-
-// const date = new Date("2021-02-10T22:30:00+01:00");
-// console.log("2021-02-10T22:30:00+01:00".split("T")[1].split(":")[0]);
