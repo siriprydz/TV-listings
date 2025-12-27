@@ -77,7 +77,7 @@ function renderChannelInfo(channelProgramsArray) {
       showAllProgramsButton = false;
       console.log("visar alla program");
       console.log(allChannelPrograms);
-      showAllPrograms(allChannelPrograms);
+      showAllPrograms(ProgramsInOrder(allChannelPrograms));
     });
   }
   ProgramInfoDiv.appendChild(createProgramList(channelProgramsArray));
@@ -98,10 +98,10 @@ function upcomingPrograms(programs) {
     return programMinutes >= nowMinutes;
   });
   console.log(upcomingPrograms);
-  return upcomingProgramsInOrder(upcomingPrograms);
+  return ProgramsInOrder(upcomingPrograms);
 }
 
-function upcomingProgramsInOrder(programs) {
+function ProgramsInOrder(programs) {
   programs.sort((aProgram, bProgram) => {
     const aDate = new Date(aProgram.start);
     const bDate = new Date(bProgram.start);
