@@ -87,32 +87,6 @@ function showAllPrograms(programs) {
   renderChannelInfo(programs);
 }
 
-let testArray = [
-  {
-    name: "VM-vintern: Magasin",
-    start: "2021-02-10T22:30:00+01:00",
-    description:
-      "Höjdpunkter, nyheter och intervjuer från skidskytte-VM i Pokljuka, Slovenien och alpina VM i Cortina, Italien. Programledare: André Pops.",
-  },
-  {
-    name: "Komma ut",
-    start: "2021-02-10T23:00:00+01:00",
-    description:
-      "Sigrid. Sigrid ska ta med sin flickvän på släktmiddag för första gången. Eftersom inte alla i släkten vet att hon är homosexuell har hon bestämt sig för att först berätta för sin faster och farbror. Sigrid får också träffa två kända idrottskvinnor som är gifta med varandra och har barn. Del 5 av 7. UR.",
-  },
-  {
-    name: "Rapport",
-    start: "2021-02-10T22:25:00+01:00",
-    description: "Nyheter från Sverige och världen.",
-  },
-  {
-    name: "Sverige idag",
-    start: "2021-02-11T04:45:00+01:00",
-    description: "Nyheter från hela Sverige - direkt från Umeå.",
-  },
-];
-
-upcomingPrograms(testArray);
 function upcomingPrograms(programs) {
   const currentTime = new Date();
   const nowMinutes = currentTime.getHours() * 60 + currentTime.getMinutes(); //Minutes since midight
