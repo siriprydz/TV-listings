@@ -50,8 +50,6 @@ async function setChannel(channelName) {
     renderChannelInfo(upcomingChannelPrograms);
     renderChannelTitle(channelName);
     formatTime(upcomingChannelPrograms);
-
-    // showProgramInfo(channelName);
   } catch (error) {
     console.error(error.message);
   }
@@ -63,12 +61,6 @@ function renderChannelTitle(nameOfChannel) {
   ChannelTitle.innerText = `${nameOfChannel}`;
   console.log(ChannelTitle);
 }
-
-// function (nameOfChannel) {
-//   ArrayWithRemovedDescription = channelProgramsArray.map((name, start) =>
-//     renderChannelInfo()
-//   );
-// }
 
 function renderChannelInfo(channelProgramsArray) {
   let ProgramInfoDiv = document.querySelector("#js-schedule");
