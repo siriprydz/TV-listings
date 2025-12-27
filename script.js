@@ -33,8 +33,20 @@ function toggleMenu() {
   changeMenuIcon();
   changeMenuIconBackgroundColor();
 }
+
+const loadingGif = document.querySelector("#js-loading");
+
+function showLoadingGif() {
+  loadingGif.classList.remove("hidden");
+}
+
+function hideLoadingGif() {
+  loadingGif.classList.add("hidden");
+}
+
 async function setChannel(channelName) {
   const url = `./data/${channelName}.json`;
+  showLoadingGif();
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -42,9 +54,9 @@ async function setChannel(channelName) {
     }
 
     const channelProgramsArray = await response.json();
+    hideLoadingGif();
     showAllProgramsButton = true;
     allChannelPrograms = channelProgramsArray;
-    console;
 
     const upcomingChannelPrograms = upcomingPrograms(channelProgramsArray);
     renderChannelInfo(upcomingChannelPrograms);
