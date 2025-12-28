@@ -112,17 +112,20 @@ function showAllPrograms(programs) {
   renderChannelInfo(programs);
 }
 
+function minutesSinceMidnight(date) {
+  return date.getHours() * 60 + date.getMinutes();
+}
+
 function upcomingPrograms(programs) {
   const currentTime = new Date();
-  const nowMinutes = currentTime.getHours() * 60 + currentTime.getMinutes(); //Minutes since midight
+  const minutesSinceMidnighFromNow = minutesSinceMidnight(currentTime);
 
   const upcomingPrograms = programs.filter((program) => {
     const programDate = new Date(program.start);
-    const programMinutes =
-      programDate.getHours() * 60 + programDate.getMinutes();
-    return programMinutes >= nowMinutes;
+    const minutesSinceMidnightFromProgramStart =
+      minutesSinceMidnight(programDate);
+    return minutesSinceMidnightFromProgramStart >= minutesSinceMidnighFromNow;
   });
-  console.log(upcomingPrograms);
   return ProgramsInOrder(upcomingPrograms);
 }
 
@@ -131,8 +134,8 @@ function ProgramsInOrder(programs) {
     const aDate = new Date(aProgram.start);
     const bDate = new Date(bProgram.start);
 
-    const aMinutes = aDate.getHours() * 60 + aDate.getMinutes();
-    const bMinutes = bDate.getHours() * 60 + bDate.getMinutes();
+    const aMinutes = minutesSinceMidnight(aDate);
+    const bMinutes = minutesSinceMidnight(bDate);
 
     return aMinutes - bMinutes;
   });
