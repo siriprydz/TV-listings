@@ -34,7 +34,7 @@ const ChannelTitle = document.querySelector("#js-title");
 const menuIcon = document.querySelector("i");
 
 document.addEventListener("DOMContentLoaded", () => {
-  setChannel("svt 1");
+  setChannel("SVT 1");
 });
 
 function toggleMenu() {
