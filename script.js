@@ -147,25 +147,31 @@ function ProgramsInOrder(programs) {
 }
 
 function createProgramList(programs) {
-  let ul = document.createElement("ul");
+  const ul = document.createElement("ul");
   ul.classList.add("list-group", "list-group-flush");
+
   programs.forEach((program) => {
-    let li = document.createElement("li");
+    const li = document.createElement("li");
     li.classList.add("list-group-item");
 
-    const date = new Date(program.start);
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
+    const start = new Date(program.start);
+    const time = formatTime(start);
 
-    const stringHours = hours < 10 ? "0" + hours : hours;
-    const stringMinutes = minutes < 10 ? "0" + minutes : minutes;
-    const timeString = stringHours + ":" + stringMinutes;
+    li.innerHTML = `
+      <strong>${time}</strong>
+      <div>${program.name}</div>
+    `;
 
-    li.innerHTML = ` <strong>${timeString}</strong>
-    <div>${program.name}</div>`;
     ul.appendChild(li);
   });
+
   return ul;
+}
+
+function formatTime(date) {
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  return `${hours}:${minutes}`;
 }
 
 function changeMenuIconBackgroundColor(isOpen) {
