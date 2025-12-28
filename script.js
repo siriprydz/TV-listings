@@ -22,7 +22,6 @@ if (window.MENU_ANIMATION_MODE === ANIMATION.NONE) {
 //--------------------------
 
 // Menu functionality
-function main() {}
 
 let allChannelPrograms = [];
 let showAllProgramsButton = true;
