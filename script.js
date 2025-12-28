@@ -28,6 +28,12 @@ let allChannelPrograms = [];
 let showAllProgramsButton = true;
 let menuOpen = false;
 const menu = document.querySelector("ul.menu"); // menyn / the menu
+let ProgramInfoDiv = document.querySelector("#js-schedule");
+const loadingGif = document.querySelector("#js-loading");
+
+document.addEventListener("DOMContentLoaded", () => {
+  setChannel("svt 1");
+});
 
 function toggleMenu() {
   menuOpen = !menuOpen;
@@ -38,8 +44,6 @@ function toggleMenu() {
   changeMenuIconBackgroundColor(menuOpen);
 }
 
-const loadingGif = document.querySelector("#js-loading");
-
 function showLoadingGif() {
   loadingGif.classList.remove("hidden");
 }
@@ -48,9 +52,16 @@ function hideLoadingGif() {
   loadingGif.classList.add("hidden");
 }
 
+clearChannelInfo = () => {
+  ProgramInfoDiv = document.querySelector("#js-schedule");
+  ProgramInfoDiv.innerHTML = "";
+};
+
 async function setChannel(channelName) {
-  const url = `./data/${channelName}.json`;
+  renderChannelTitle(channelName);
+  clearChannelInfo();
   showLoadingGif();
+  const url = `./data/${channelName}.json`;
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -64,7 +75,6 @@ async function setChannel(channelName) {
 
     const upcomingChannelPrograms = upcomingPrograms(channelProgramsArray);
     renderChannelInfo(upcomingChannelPrograms);
-    renderChannelTitle(channelName);
     formatTime(upcomingChannelPrograms);
   } catch (error) {
     console.error(error.message);
@@ -79,7 +89,6 @@ function renderChannelTitle(nameOfChannel) {
 }
 
 function renderChannelInfo(channelProgramsArray) {
-  let ProgramInfoDiv = document.querySelector("#js-schedule");
   let ProgramInfoDivContent = "";
   let showPreviousBtn = "";
   if (showAllProgramsButton) {
