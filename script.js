@@ -27,9 +27,12 @@ function main() {}
 let allChannelPrograms = [];
 let showAllProgramsButton = true;
 let menuOpen = false;
-const menu = document.querySelector("ul.menu"); // menyn / the menu
-let programInfoDiv = document.querySelector("#js-schedule");
+
+const menu = document.querySelector("ul.menu");
+const programInfoDiv = document.querySelector("#js-schedule");
 const loadingGif = document.querySelector("#js-loading");
+const ChannelTitle = document.querySelector("#js-title");
+const menuIcon = document.querySelector("i");
 
 document.addEventListener("DOMContentLoaded", () => {
   setChannel("svt 1");
@@ -52,7 +55,6 @@ function hideLoadingGif() {
 }
 
 clearChannelInfo = () => {
-  programInfoDiv = document.querySelector("#js-schedule");
   programInfoDiv.innerHTML = "";
 };
 
@@ -81,7 +83,6 @@ async function setChannel(channelName) {
 }
 
 function renderChannelTitle(nameOfChannel) {
-  let ChannelTitle = document.querySelector("#js-title");
   ChannelTitle.innerText = `${nameOfChannel}`;
 }
 
@@ -161,8 +162,6 @@ function createProgramList(programs) {
 }
 
 function changeMenuIcon(isOpen) {
-  let menuIcon = document.querySelector("i");
-
   if (isOpen) {
     menuIcon.classList.remove("fa-bars");
     menuIcon.classList.add("fa-times");
