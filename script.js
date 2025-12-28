@@ -26,12 +26,16 @@ function main() {}
 
 let allChannelPrograms = [];
 let showAllProgramsButton = true;
+let menuOpen = false;
+const menu = document.querySelector("ul.menu"); // menyn / the menu
 
 function toggleMenu() {
+  menuOpen = !menuOpen;
+  menu.classList.toggle("menu--show", menuOpen);
+
   console.log("button clicked");
-  revealMenu();
-  changeMenuIcon();
-  changeMenuIconBackgroundColor();
+  changeMenuIcon(menuOpen);
+  changeMenuIconBackgroundColor(menuOpen);
 }
 
 const loadingGif = document.querySelector("#js-loading");
@@ -149,28 +153,40 @@ function createProgramList(programs) {
   return ul;
 }
 
-function revealMenu() {
-  let UlMenuCssRule = document.styleSheets[2].cssRules[8].style;
-  let UlMenuPosition = UlMenuCssRule.setProperty("left", "0px");
-}
-
-function changeMenuIcon() {
+function changeMenuIcon(isOpen) {
   let menuIcon = document.querySelector("i");
-  menuIcon.classList.remove("fas", "fa-bars");
-  const crossIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-x" viewBox="3 2.9 16 16">
+
+  if (isOpen) {
+    menuIcon.classList.remove("fas", "fa-bars");
+    const crossIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-x" viewBox="3 2.9 16 16">
   <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/></svg>`;
-  let iconDiv = document.querySelector("i");
-  iconDiv.innerHTML = crossIcon;
+    menuIcon.innerHTML = crossIcon;
+  } else {
+    menuIcon.innerHTML = "";
+    menuIcon.className = "fas fa-bars";
+  }
 }
 
-function changeMenuIconBackgroundColor() {
-  let MenuIconCssRule = document.styleSheets[2].cssRules[6].style;
-  let MenuIconBackgroundcolor = MenuIconCssRule.setProperty(
-    "background-color",
-    "azure"
-  );
-  let MenuIconBorderRadius = MenuIconCssRule.setProperty(
-    "border-radius",
-    "10px"
-  );
+function changeMenuIconBackgroundColor(isOpen) {
+  if (isOpen) {
+    let MenuIconCssRule = document.styleSheets[2].cssRules[6].style;
+    let MenuIconBackgroundcolor = MenuIconCssRule.setProperty(
+      "background-color",
+      "azure"
+    );
+    let MenuIconBorderRadius = MenuIconCssRule.setProperty(
+      "border-radius",
+      "10px"
+    );
+  } else {
+    let MenuIconCssRule = document.styleSheets[2].cssRules[6].style;
+    let MenuIconBackgroundcolor = MenuIconCssRule.setProperty(
+      "background-color",
+      "transparent"
+    );
+    let MenuIconBorderRadius = MenuIconCssRule.setProperty(
+      "border-radius",
+      "0px"
+    );
+  }
 }
