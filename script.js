@@ -41,8 +41,9 @@ document.addEventListener("DOMContentLoaded", () => {
 function toggleMenu() {
   menuOpen = !menuOpen;
   menu.classList.toggle("menu--show", menuOpen);
+  menuIcon.classList.toggle("fa-bars", !menuOpen);
+  menuIcon.classList.toggle("fa-times", menuOpen);
 
-  changeMenuIcon(menuOpen);
   changeMenuIconBackgroundColor(menuOpen);
 }
 
@@ -159,16 +160,6 @@ function createProgramList(programs) {
     ul.appendChild(li);
   });
   return ul;
-}
-
-function changeMenuIcon(isOpen) {
-  if (isOpen) {
-    menuIcon.classList.remove("fa-bars");
-    menuIcon.classList.add("fa-times");
-  } else {
-    menuIcon.classList.remove("fa-times");
-    menuIcon.classList.add("fa-bars");
-  }
 }
 
 function changeMenuIconBackgroundColor(isOpen) {
