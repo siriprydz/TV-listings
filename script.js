@@ -39,7 +39,6 @@ function toggleMenu() {
   menuOpen = !menuOpen;
   menu.classList.toggle("menu--show", menuOpen);
 
-  console.log("button clicked");
   changeMenuIcon(menuOpen);
   changeMenuIconBackgroundColor(menuOpen);
 }
@@ -83,9 +82,7 @@ async function setChannel(channelName) {
 
 function renderChannelTitle(nameOfChannel) {
   let ChannelTitle = document.querySelector("#js-title");
-  console.log(ChannelTitle);
   ChannelTitle.innerText = `${nameOfChannel}`;
-  console.log(ChannelTitle);
 }
 
 function renderChannelInfo(channelProgramsArray) {
@@ -100,8 +97,6 @@ function renderChannelInfo(channelProgramsArray) {
   if (showPreviousBtn) {
     showPreviousBtn.addEventListener("click", (event) => {
       showAllProgramsButton = false;
-      console.log("visar alla program");
-      console.log(allChannelPrograms);
       showAllPrograms(ProgramsInOrder(allChannelPrograms));
     });
   }
