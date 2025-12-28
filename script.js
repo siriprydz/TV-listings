@@ -30,7 +30,7 @@ let menuOpen = false;
 const menu = document.querySelector("ul.menu");
 const programInfoDiv = document.querySelector("#js-schedule");
 const loadingGif = document.querySelector("#js-loading");
-const ChannelTitle = document.querySelector("#js-title");
+const channelTitle = document.querySelector("#js-title");
 const menuIcon = document.querySelector("i");
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -89,7 +89,7 @@ async function fetchChannelPrograms(channelName) {
 }
 
 function renderChannelTitle(nameOfChannel) {
-  ChannelTitle.innerText = `${nameOfChannel}`;
+  channelTitle.innerText = `${nameOfChannel}`;
 }
 
 function renderChannelInfo(channelProgramsArray) {
