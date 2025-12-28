@@ -28,7 +28,7 @@ let allChannelPrograms = [];
 let showAllProgramsButton = true;
 let menuOpen = false;
 const menu = document.querySelector("ul.menu"); // menyn / the menu
-let ProgramInfoDiv = document.querySelector("#js-schedule");
+let programInfoDiv = document.querySelector("#js-schedule");
 const loadingGif = document.querySelector("#js-loading");
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -52,8 +52,8 @@ function hideLoadingGif() {
 }
 
 clearChannelInfo = () => {
-  ProgramInfoDiv = document.querySelector("#js-schedule");
-  ProgramInfoDiv.innerHTML = "";
+  programInfoDiv = document.querySelector("#js-schedule");
+  programInfoDiv.innerHTML = "";
 };
 
 async function setChannel(channelName) {
@@ -86,12 +86,12 @@ function renderChannelTitle(nameOfChannel) {
 }
 
 function renderChannelInfo(channelProgramsArray) {
-  let ProgramInfoDivContent = "";
+  let programInfoDivContent = "";
   let showPreviousBtn = "";
   if (showAllProgramsButton) {
     showPreviousBtn = `<li class="list-group-item show-previous">Visa tidigare program</li>`;
   }
-  ProgramInfoDiv.innerHTML = showPreviousBtn + ProgramInfoDivContent;
+  programInfoDiv.innerHTML = showPreviousBtn + programInfoDivContent;
 
   showPreviousBtn = document.querySelector(".show-previous");
   if (showPreviousBtn) {
@@ -100,7 +100,7 @@ function renderChannelInfo(channelProgramsArray) {
       showAllPrograms(ProgramsInOrder(allChannelPrograms));
     });
   }
-  ProgramInfoDiv.appendChild(createProgramList(channelProgramsArray));
+  programInfoDiv.appendChild(createProgramList(channelProgramsArray));
 }
 
 function showAllPrograms(programs) {
