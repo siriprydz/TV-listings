@@ -63,24 +63,30 @@ async function setChannel(channelName) {
   renderChannelTitle(channelName);
   clearChannelInfo();
   showLoadingGif();
-  const url = `./data/${channelName}.json`;
   try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
-    }
+    const programs = await fetchChannelPrograms(channelName);
 
-    const channelProgramsArray = await response.json();
-    hideLoadingGif();
+    allChannelPrograms = programs;
     showAllProgramsButton = true;
-    allChannelPrograms = channelProgramsArray;
 
-    const upcomingChannelPrograms = upcomingPrograms(channelProgramsArray);
-    renderChannelInfo(upcomingChannelPrograms);
-    formatTime(upcomingChannelPrograms);
+    const upcoming = upcomingPrograms(programs);
+    renderChannelInfo(upcoming);
   } catch (error) {
-    console.error(error.message);
+    console.error(error);
+  } finally {
+    hideLoadingGif();
   }
+}
+
+async function fetchChannelPrograms(channelName) {
+  const url = `./data/${channelName}.json`;
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error(`Response status ${response.status}`);
+  }
+
+  return response.json();
 }
 
 function renderChannelTitle(nameOfChannel) {
