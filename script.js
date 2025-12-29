@@ -26,21 +26,26 @@ if (window.MENU_ANIMATION_MODE === ANIMATION.NONE) {
 let allChannelPrograms = [];
 let showAllProgramsButton = true;
 let menuOpen = false;
+let currentChannel = "svt 1";
 
 const menu = document.querySelector("ul.menu");
 const programInfoDiv = document.querySelector("#js-schedule");
 const loadingGif = document.querySelector("#js-loading");
 const channelTitle = document.querySelector("#js-title");
-const menuIcon = document.querySelector("i");
+const menuIcon = document.querySelector(".menu-icon i.fas");
 
 function init() {
-  setChannel("svt 1");
+  setChannel(currentChannel);
 }
 
 if (document.readyState !== "loading") {
   init();
 } else {
-  document.addEventListener("DOMContentLoaded", init);
+  document.addEventListener("DOMContentLoaded", pageLoaded);
+}
+
+function pageLoaded() {
+  init();
 }
 
 function toggleMenu() {
@@ -159,7 +164,7 @@ function createProgramList(programs) {
     li.classList.add("list-group-item");
 
     const start = new Date(program.start);
-    const time = formatTime(start);
+    const time = toTimeString(start);
 
     li.innerHTML = `
       <strong>${time}</strong>
@@ -172,32 +177,16 @@ function createProgramList(programs) {
   return ul;
 }
 
-function formatTime(date) {
+function toTimeString(date, separator = ":") {
   const hours = String(date.getHours()).padStart(2, "0");
   const minutes = String(date.getMinutes()).padStart(2, "0");
-  return `${hours}:${minutes}`;
+  return `${hours}${separator}${minutes}`;
 }
 
 function changeMenuIconBackgroundColor(isOpen) {
-  if (isOpen) {
-    let MenuIconCssRule = document.styleSheets[2].cssRules[6].style;
-    let MenuIconBackgroundcolor = MenuIconCssRule.setProperty(
-      "background-color",
-      "azure"
-    );
-    let MenuIconBorderRadius = MenuIconCssRule.setProperty(
-      "border-radius",
-      "10px"
-    );
-  } else {
-    let MenuIconCssRule = document.styleSheets[2].cssRules[6].style;
-    let MenuIconBackgroundcolor = MenuIconCssRule.setProperty(
-      "background-color",
-      "transparent"
-    );
-    let MenuIconBorderRadius = MenuIconCssRule.setProperty(
-      "border-radius",
-      "0px"
-    );
-  }
+  let iconBackgroundColor = isOpen ? "azure" : "transparent";
+  let iconBorderRadius = isOpen ? "10px" : "0px";
+
+  menuIcon.style.backgroundColor = iconBackgroundColor;
+  menuIcon.style.borderRadius = iconBorderRadius;
 }
