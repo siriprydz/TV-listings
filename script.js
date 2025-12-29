@@ -22,25 +22,27 @@ if (window.MENU_ANIMATION_MODE === ANIMATION.NONE) {
 //--------------------------
 
 // Menu functionality
-function main() {}
 
 let allChannelPrograms = [];
 let showAllProgramsButton = true;
 let menuOpen = false;
-const menu = document.querySelector("ul.menu"); // menyn / the menu
-let ProgramInfoDiv = document.querySelector("#js-schedule");
+
+const menu = document.querySelector("ul.menu");
+const programInfoDiv = document.querySelector("#js-schedule");
 const loadingGif = document.querySelector("#js-loading");
+const channelTitle = document.querySelector("#js-title");
+const menuIcon = document.querySelector("i");
 
 document.addEventListener("DOMContentLoaded", () => {
-  setChannel("svt 1");
+  setChannel("SVT 1");
 });
 
 function toggleMenu() {
   menuOpen = !menuOpen;
   menu.classList.toggle("menu--show", menuOpen);
+  menuIcon.classList.toggle("fa-bars", !menuOpen);
+  menuIcon.classList.toggle("fa-times", menuOpen);
 
-  console.log("button clicked");
-  changeMenuIcon(menuOpen);
   changeMenuIconBackgroundColor(menuOpen);
 }
 
@@ -52,77 +54,79 @@ function hideLoadingGif() {
   loadingGif.classList.add("hidden");
 }
 
-clearChannelInfo = () => {
-  ProgramInfoDiv = document.querySelector("#js-schedule");
-  ProgramInfoDiv.innerHTML = "";
-};
+function clearChannelInfo() {
+  programInfoDiv.innerHTML = "";
+}
 
 async function setChannel(channelName) {
   renderChannelTitle(channelName);
   clearChannelInfo();
   showLoadingGif();
-  const url = `./data/${channelName}.json`;
   try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
-    }
+    const programs = await fetchChannelPrograms(channelName);
 
-    const channelProgramsArray = await response.json();
-    hideLoadingGif();
+    allChannelPrograms = programs;
     showAllProgramsButton = true;
-    allChannelPrograms = channelProgramsArray;
 
-    const upcomingChannelPrograms = upcomingPrograms(channelProgramsArray);
-    renderChannelInfo(upcomingChannelPrograms);
-    formatTime(upcomingChannelPrograms);
+    const upcoming = upcomingPrograms(programs);
+    renderChannelInfo(upcoming);
   } catch (error) {
-    console.error(error.message);
+    console.error(error);
+  } finally {
+    hideLoadingGif();
   }
 }
 
+async function fetchChannelPrograms(channelName) {
+  const url = `./data/${channelName}.json`;
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error(`Response status ${response.status}`);
+  }
+
+  return response.json();
+}
+
 function renderChannelTitle(nameOfChannel) {
-  let ChannelTitle = document.querySelector("#js-title");
-  console.log(ChannelTitle);
-  ChannelTitle.innerText = `${nameOfChannel}`;
-  console.log(ChannelTitle);
+  channelTitle.innerText = `${nameOfChannel}`;
 }
 
 function renderChannelInfo(channelProgramsArray) {
-  let ProgramInfoDivContent = "";
   let showPreviousBtn = "";
   if (showAllProgramsButton) {
     showPreviousBtn = `<li class="list-group-item show-previous">Visa tidigare program</li>`;
   }
-  ProgramInfoDiv.innerHTML = showPreviousBtn + ProgramInfoDivContent;
+  programInfoDiv.innerHTML = showPreviousBtn;
 
   showPreviousBtn = document.querySelector(".show-previous");
   if (showPreviousBtn) {
     showPreviousBtn.addEventListener("click", (event) => {
       showAllProgramsButton = false;
-      console.log("visar alla program");
-      console.log(allChannelPrograms);
       showAllPrograms(ProgramsInOrder(allChannelPrograms));
     });
   }
-  ProgramInfoDiv.appendChild(createProgramList(channelProgramsArray));
+  programInfoDiv.appendChild(createProgramList(channelProgramsArray));
 }
 
 function showAllPrograms(programs) {
   renderChannelInfo(programs);
 }
 
+function minutesSinceMidnight(date) {
+  return date.getHours() * 60 + date.getMinutes();
+}
+
 function upcomingPrograms(programs) {
   const currentTime = new Date();
-  const nowMinutes = currentTime.getHours() * 60 + currentTime.getMinutes(); //Minutes since midight
+  const minutesSinceMidnighFromNow = minutesSinceMidnight(currentTime);
 
   const upcomingPrograms = programs.filter((program) => {
     const programDate = new Date(program.start);
-    const programMinutes =
-      programDate.getHours() * 60 + programDate.getMinutes();
-    return programMinutes >= nowMinutes;
+    const minutesSinceMidnightFromProgramStart =
+      minutesSinceMidnight(programDate);
+    return minutesSinceMidnightFromProgramStart >= minutesSinceMidnighFromNow;
   });
-  console.log(upcomingPrograms);
   return ProgramsInOrder(upcomingPrograms);
 }
 
@@ -131,8 +135,8 @@ function ProgramsInOrder(programs) {
     const aDate = new Date(aProgram.start);
     const bDate = new Date(bProgram.start);
 
-    const aMinutes = aDate.getHours() * 60 + aDate.getMinutes();
-    const bMinutes = bDate.getHours() * 60 + bDate.getMinutes();
+    const aMinutes = minutesSinceMidnight(aDate);
+    const bMinutes = minutesSinceMidnight(bDate);
 
     return aMinutes - bMinutes;
   });
@@ -141,37 +145,31 @@ function ProgramsInOrder(programs) {
 }
 
 function createProgramList(programs) {
-  let ul = document.createElement("ul");
+  const ul = document.createElement("ul");
   ul.classList.add("list-group", "list-group-flush");
+
   programs.forEach((program) => {
-    let li = document.createElement("li");
+    const li = document.createElement("li");
     li.classList.add("list-group-item");
 
-    const date = new Date(program.start);
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
+    const start = new Date(program.start);
+    const time = formatTime(start);
 
-    const stringHours = hours < 10 ? "0" + hours : hours;
-    const stringMinutes = minutes < 10 ? "0" + minutes : minutes;
-    const timeString = stringHours + ":" + stringMinutes;
+    li.innerHTML = `
+      <strong>${time}</strong>
+      <div>${program.name}</div>
+    `;
 
-    li.innerHTML = ` <strong>${timeString}</strong>
-    <div>${program.name}</div>`;
     ul.appendChild(li);
   });
+
   return ul;
 }
 
-function changeMenuIcon(isOpen) {
-  let menuIcon = document.querySelector("i");
-
-  if (isOpen) {
-    menuIcon.classList.remove("fa-bars");
-    menuIcon.classList.add("fa-times");
-  } else {
-    menuIcon.classList.remove("fa-times");
-    menuIcon.classList.add("fa-bars");
-  }
+function formatTime(date) {
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  return `${hours}:${minutes}`;
 }
 
 function changeMenuIconBackgroundColor(isOpen) {
