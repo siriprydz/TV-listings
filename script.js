@@ -179,25 +179,9 @@ function formatTime(date) {
 }
 
 function changeMenuIconBackgroundColor(isOpen) {
-  if (isOpen) {
-    let MenuIconCssRule = document.styleSheets[2].cssRules[6].style;
-    let MenuIconBackgroundcolor = MenuIconCssRule.setProperty(
-      "background-color",
-      "azure"
-    );
-    let MenuIconBorderRadius = MenuIconCssRule.setProperty(
-      "border-radius",
-      "10px"
-    );
-  } else {
-    let MenuIconCssRule = document.styleSheets[2].cssRules[6].style;
-    let MenuIconBackgroundcolor = MenuIconCssRule.setProperty(
-      "background-color",
-      "transparent"
-    );
-    let MenuIconBorderRadius = MenuIconCssRule.setProperty(
-      "border-radius",
-      "0px"
-    );
-  }
+  let iconBackgroundColor = isOpen ? "azure" : "transparent";
+  let iconBorderRadius = isOpen ? "10px" : "0px";
+
+  menuIcon.style.backgroundColor = iconBackgroundColor;
+  menuIcon.style.borderRadius = iconBorderRadius;
 }
