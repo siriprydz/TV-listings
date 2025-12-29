@@ -33,9 +33,15 @@ const loadingGif = document.querySelector("#js-loading");
 const channelTitle = document.querySelector("#js-title");
 const menuIcon = document.querySelector("i");
 
-document.addEventListener("DOMContentLoaded", () => {
-  setChannel("SVT 1");
-});
+function init() {
+  setChannel("svt 1");
+}
+
+if (document.readyState !== "loading") {
+  init();
+} else {
+  document.addEventListener("DOMContentLoaded", init);
+}
 
 function toggleMenu() {
   menuOpen = !menuOpen;
