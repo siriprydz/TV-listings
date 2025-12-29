@@ -54,9 +54,9 @@ function hideLoadingGif() {
   loadingGif.classList.add("hidden");
 }
 
-clearChannelInfo = () => {
+function clearChannelInfo() {
   programInfoDiv.innerHTML = "";
-};
+}
 
 async function setChannel(channelName) {
   renderChannelTitle(channelName);
