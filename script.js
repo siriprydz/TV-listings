@@ -26,6 +26,7 @@ if (window.MENU_ANIMATION_MODE === ANIMATION.NONE) {
 let allChannelPrograms = [];
 let showAllProgramsButton = true;
 let menuOpen = false;
+let currentChannel = "svt 1";
 
 const menu = document.querySelector("ul.menu");
 const programInfoDiv = document.querySelector("#js-schedule");
@@ -34,13 +35,17 @@ const channelTitle = document.querySelector("#js-title");
 const menuIcon = document.querySelector("i");
 
 function init() {
-  setChannel("svt 1");
+  setChannel(currentChannel);
 }
 
 if (document.readyState !== "loading") {
   init();
 } else {
-  document.addEventListener("DOMContentLoaded", init);
+  document.addEventListener("DOMContentLoaded", pageLoaded);
+}
+
+function pageLoaded() {
+  init();
 }
 
 function toggleMenu() {
