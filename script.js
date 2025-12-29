@@ -93,12 +93,11 @@ function renderChannelTitle(nameOfChannel) {
 }
 
 function renderChannelInfo(channelProgramsArray) {
-  let programInfoDivContent = "";
   let showPreviousBtn = "";
   if (showAllProgramsButton) {
     showPreviousBtn = `<li class="list-group-item show-previous">Visa tidigare program</li>`;
   }
-  programInfoDiv.innerHTML = showPreviousBtn + programInfoDivContent;
+  programInfoDiv.innerHTML = showPreviousBtn;
 
   showPreviousBtn = document.querySelector(".show-previous");
   if (showPreviousBtn) {
