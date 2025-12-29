@@ -177,10 +177,10 @@ function createProgramList(programs) {
   return ul;
 }
 
-function formatTime(date) {
+function formatTime(date, separator = ":") {
   const hours = String(date.getHours()).padStart(2, "0");
   const minutes = String(date.getMinutes()).padStart(2, "0");
-  return `${hours}:${minutes}`;
+  return `${hours}${separator}${minutes}`;
 }
 
 function changeMenuIconBackgroundColor(isOpen) {
