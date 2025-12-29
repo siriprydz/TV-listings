@@ -164,7 +164,7 @@ function createProgramList(programs) {
     li.classList.add("list-group-item");
 
     const start = new Date(program.start);
-    const time = formatTime(start);
+    const time = toTimeString(start);
 
     li.innerHTML = `
       <strong>${time}</strong>
@@ -177,7 +177,7 @@ function createProgramList(programs) {
   return ul;
 }
 
-function formatTime(date, separator = ":") {
+function toTimeString(date, separator = ":") {
   const hours = String(date.getHours()).padStart(2, "0");
   const minutes = String(date.getMinutes()).padStart(2, "0");
   return `${hours}${separator}${minutes}`;
