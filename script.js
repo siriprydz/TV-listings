@@ -32,7 +32,7 @@ const menu = document.querySelector("ul.menu");
 const programInfoDiv = document.querySelector("#js-schedule");
 const loadingGif = document.querySelector("#js-loading");
 const channelTitle = document.querySelector("#js-title");
-const menuIcon = document.querySelector("i");
+const menuIcon = document.querySelector(".menu-icon i.fas");
 
 function init() {
   setChannel(currentChannel);
